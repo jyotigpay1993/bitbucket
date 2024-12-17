@@ -1,0 +1,26 @@
+parameters:
+    # Define your project-specific parameters here if needed
+    # Example:
+    # app.upload_directory: '%kernel.project_dir%/var/documents'
+
+services:
+    # Default configuration for services in this file
+    _defaults:
+        autowire: true      # Automatically inject dependencies in your services
+        autoconfigure: true # Automatically register services as commands, event subscribers, etc.
+
+    # Makes classes in src/ available as services
+    # This creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Explicit service configuration for ApplicationDocumentService
+    App\Service\ApplicationDocumentService:
+        arguments:
+            $httpClient: '@http_client'                             # Inject HttpClientInterface service
+            $DocumentPath: '%kernel.project_dir%/var/documents'      # Provide storage path string
+            $logger: '@logger'                                      # Inject LoggerInterface service
